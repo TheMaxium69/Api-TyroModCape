@@ -2,23 +2,4 @@
 
 header('Content-Type: application/json');
 
-if (!empty($_GET['pseudo'])) {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-} else {
-
-    echo json_encode("Field not defined");
-
-}
+echo json_encode("Bienvenue dans l'API TyroMod des capes");
