@@ -32,10 +32,17 @@ if (!empty($_GET['pseudo'])) {
 
         /* IL EN A PLUSIEUR ALORS JE CONSULE SI IL EN A SELECTIONNER UNE */
 
-        $json = file_get_contents('http://127.0.0.1/ApiUsertium/?controller=TyroServ&task=getCapeByPseudo&pseudo=' . $pseudo);
+        if (!empty($_GET['idCapeUseritium'])){
+
+            $idChooseCape = $_GET['idCapeUseritium'];
+
+        } else {
+
+            $json = file_get_contents('http://127.0.0.1/ApiUsertium/?controller=TyroServ&task=getCapeByPseudo&pseudo=' . $pseudo);
 //            $json = file_get_contents('https://useritium.fr/api-externe/?controller=TyroServ&task=getCapeByPseudo&pseudo=' . $pseudo);
-        $resultUseritiumApi = json_decode($json);
-        $idChooseCape = $resultUseritiumApi->result->cape;
+            $resultUseritiumApi = json_decode($json);
+            $idChooseCape = $resultUseritiumApi->result->cape;
+        }
 
         $idValide = false;
 
