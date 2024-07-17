@@ -62,21 +62,27 @@ if (!empty($_GET['pseudo'])) {
         /* IL NA PAS SELECTIONNER DE CAPE OU IL A MYTHO SUR LE PANNEL */
         if (!$idValide || $idChooseCape == null){
 
-            /* JE LUI DONNE ALORS LA DERNIER CAPE ACHETER */
-            $sql4 = "SELECT * FROM `players` WHERE `playerName` = '$pseudo' ORDER BY `players`.`dateAdded` DESC LIMIT 1";
-            $stmt4 = $db->prepare($sql4);
-            $stmt4->execute();
-            $resultPlayerLatest = $stmt4->fetch();
+            /* VERIFIER SI IL NE VEUT TOUT SIMPLEMENT PAS DE CAPE*/
+            if ($idChooseCape != 99999999){
+
+                /* JE LUI DONNE ALORS LA DERNIER CAPE ACHETER */
+                $sql4 = "SELECT * FROM `players` WHERE `playerName` = '$pseudo' ORDER BY `players`.`dateAdded` DESC LIMIT 1";
+                $stmt4 = $db->prepare($sql4);
+                $stmt4->execute();
+                $resultPlayerLatest = $stmt4->fetch();
 
 
 
-            $idCapesLatest = $resultPlayerLatest['idCapes'];
+                $idCapesLatest = $resultPlayerLatest['idCapes'];
 
-            foreach ($result as &$res) {
-                if ($idCapesLatest == $res['idCapes']){
-                    $res['isSelected'] = 1;
+                foreach ($result as &$res) {
+                    if ($idCapesLatest == $res['idCapes']){
+                        $res['isSelected'] = 1;
+                    }
                 }
+
             }
+
 
 
         } else {

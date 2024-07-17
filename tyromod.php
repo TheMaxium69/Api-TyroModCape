@@ -80,34 +80,52 @@ if (!empty($_GET['pseudo'])) {
             /* IL NA PAS SELECTIONNER DE CAPE OU IL A MYTHO SUR LE PANNEL */
             if (!$idValide || $idChooseCape == null){
 
-                /* JE LUI DONNE ALORS LA DERNIER CAPE ACHETER */
-                $sql4 = "SELECT * FROM `players` WHERE `playerName` = '$pseudo' ORDER BY `players`.`dateAdded` DESC LIMIT 1";
-                $stmt4 = $db->prepare($sql4);
-                $stmt4->execute();
-                $resultPlayerLatest = $stmt4->fetch();
+                /* VERIFIER SI IL NE VEUT TOUT SIMPLEMENT PAS DE CAPE*/
+                if ($idChooseCape != 99999999) {
 
-                $idCapesLatest = $resultPlayerLatest['idCapes'];
+                    /* JE LUI DONNE ALORS LA DERNIER CAPE ACHETER */
+                    $sql4 = "SELECT * FROM `players` WHERE `playerName` = '$pseudo' ORDER BY `players`.`dateAdded` DESC LIMIT 1";
+                    $stmt4 = $db->prepare($sql4);
+                    $stmt4->execute();
+                    $resultPlayerLatest = $stmt4->fetch();
 
-                $sql5 = "SELECT * FROM capes WHERE id = '$idCapesLatest'";
-                $stmt5 = $db->prepare($sql5);
-                $stmt5->execute();
-                $resultCapeLatestOne = $stmt5->fetch();
+                    $idCapesLatest = $resultPlayerLatest['idCapes'];
 
-                if ($resultCapeLatestOne['isAnimated'] == 1){
-                    $isAnimated = true;
+                    $sql5 = "SELECT * FROM capes WHERE id = '$idCapesLatest'";
+                    $stmt5 = $db->prepare($sql5);
+                    $stmt5->execute();
+                    $resultCapeLatestOne = $stmt5->fetch();
+
+                    if ($resultCapeLatestOne['isAnimated'] == 1) {
+                        $isAnimated = true;
+                    } else {
+                        $isAnimated = false;
+                    }
+
+                    $data = array(
+                        "animatedCape" => $isAnimated,
+                        "capeGlint" => false,
+                        "upsideDown" => false,
+                        "textures" => array(
+                            "cape" => imgToBase64($resultCapeLatestOne['url']),
+                            "ears" => null
+                        )
+                    );
+
                 } else {
-                    $isAnimated = false;
-                }
 
-                $data = array(
-                    "animatedCape" => $isAnimated,
-                    "capeGlint" => false,
-                    "upsideDown" => false,
-                    "textures" => array(
-                        "cape" => imgToBase64($resultCapeLatestOne['url']),
-                        "ears" => null
-                    )
-                );
+                    /* IL NE VEUT PAS DE CAPE*/
+                    $data = array(
+                        "animatedCape" => false,
+                        "capeGlint" => false,
+                        "upsideDown" => false,
+                        "textures" => array(
+                            "cape" => null,
+                            "ears" => null
+                        )
+                    );
+
+                }
 
             } else {
 
